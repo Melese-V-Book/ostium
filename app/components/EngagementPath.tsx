@@ -12,7 +12,7 @@ export default function EngagementPath() {
         href="mailto:contact@crossnodal.com"
         className="text-gray-500 text-xs hover:text-gray-300 transition"
       >
-        contact@cross-nodal.com
+        contact@crossnodal.com
       </a>
     </div>
   );
