@@ -11,7 +11,7 @@ export default function FirstImpactSequence({ onComplete }: FirstImpactSequenceP
   const pathRef = useRef<SVGPathElement>(null);
   const animationRef = useRef<number>();
 
-  // Stage timing
+  // Stage timing – realisation appears only after deviation is well established
   useEffect(() => {
     if (stage === 'silence') {
       const t = setTimeout(() => setStage('stable'), 1000);
@@ -22,16 +22,17 @@ export default function FirstImpactSequence({ onComplete }: FirstImpactSequenceP
       return () => clearTimeout(t);
     }
     if (stage === 'deviation') {
-      const t = setTimeout(() => setStage('realisation'), 2000);
+      // Longer deviation to make it unmistakable
+      const t = setTimeout(() => setStage('realisation'), 3000);
       return () => clearTimeout(t);
     }
     if (stage === 'realisation') {
-      const t = setTimeout(() => setStage('observe'), 3000);
+      const t = setTimeout(() => setStage('observe'), 2500);
       return () => clearTimeout(t);
     }
   }, [stage]);
 
-  // Animate the path based on stage
+  // Animated path – stronger slope, irregular phase shift
   useEffect(() => {
     if (stage === 'silence') return;
 
@@ -49,24 +50,27 @@ export default function FirstImpactSequence({ onComplete }: FirstImpactSequenceP
         phaseShift = 0;
         amplitude = 15;
       } else if (stage === 'deviation') {
-        // Gradual slope increase + rhythm irregularity
+        // Increased slope (0.12) and irregular phase
         const t = Math.min(1, Math.max(0, (elapsed - 2) / 2));
-        slope = t * 0.08;
-        phaseShift = Math.sin(elapsed * 1.2) * 0.3;
-        amplitude = 15 + t * 6;
+        slope = t * 0.12;          // stronger slope
+        // Irregular rhythm: combine two frequencies
+        phaseShift = Math.sin(elapsed * 1.7) * 0.3 + Math.sin(elapsed * 0.9) * 0.2;
+        amplitude = 15 + t * 10;
       } else {
-        // realisation & observe – hold the deviation
-        slope = 0.08;
-        phaseShift = 0.2;
-        amplitude = 20;
+        // realisation & observe – hold the deviated state
+        slope = 0.12;
+        phaseShift = 0.4;
+        amplitude = 24;
       }
 
-      // Generate SVG path
+      // Build path
       const points: string[] = [];
       for (let x = 0; x <= 800; x += 20) {
         const t = x / 800;
-        const y = 100 + Math.sin(t * Math.PI * 4 + phaseShift) * amplitude + slope * (x - 400);
-        points.push(`${x},${y}`);
+        // Non‑smooth: add a small random walk component (deterministic per frame)
+        const noise = Math.sin(elapsed * 3 + x * 0.02) * 2;
+        const y = 100 + Math.sin(t * Math.PI * 4 + phaseShift) * amplitude + slope * (x - 400) + noise;
+        points.push(`${x},${Math.min(190, Math.max(10, y))}`);
       }
       const d = `M ${points.join(' L ')}`;
       if (pathRef.current) pathRef.current.setAttribute('d', d);
@@ -84,9 +88,7 @@ export default function FirstImpactSequence({ onComplete }: FirstImpactSequenceP
 
   return (
     <div className="fixed inset-0 bg-black z-50">
-      {/* Centered container – shifted slightly lower */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/3 w-full max-w-2xl px-4">
-        {/* SVG with dynamic path */}
         <svg viewBox="0 0 800 200" className="w-full">
           <path
             ref={pathRef}
@@ -94,19 +96,17 @@ export default function FirstImpactSequence({ onComplete }: FirstImpactSequenceP
             strokeWidth="1.5"
             fill="none"
             strokeLinecap="round"
+            opacity="0.9"  // slightly less than pure white – less “vector art”
           />
         </svg>
-
         <div className="h-8" />
 
-        {/* Realisation text */}
         {stage === 'realisation' && (
           <p className="text-center text-sm tracking-wide text-gray-300">
             It begins before you see it.
           </p>
         )}
 
-        {/* Observe button */}
         {stage === 'observe' && (
           <button
             onClick={handleObserve}

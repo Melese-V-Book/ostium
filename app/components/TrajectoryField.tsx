@@ -59,9 +59,9 @@ export default function TrajectoryField({ mode = 'drift' }: TrajectoryFieldProps
         } 
         else if (mode === 'step') {
           let offset = 0;
-          if (t > 0.4 && t < 0.45) offset = 20;
-          else if (t > 0.6 && t < 0.65) offset = 15;
-          else if (t > 0.85) offset = 30;
+          if (t > 0.4 && t < 0.45) offset = 25;
+          else if (t > 0.6 && t < 0.65) offset = 20;
+          else if (t > 0.85) offset = 35;
           y += offset + Math.sin(t * Math.PI * 2) * 5;
         } 
         else if (mode === 'silent_abrupt') {
@@ -100,8 +100,8 @@ export default function TrajectoryField({ mode = 'drift' }: TrajectoryFieldProps
         } 
         else if (mode === 'hybrid_drift_bifurcation') {
           let offset = 0;
-          if (t > 0.35) offset = (t - 0.35) * 35;
-          if (t > 0.7) offset += Math.sin(t * Math.PI * 6) * 12;
+          if (t > 0.35) offset = (t - 0.35) * 45;
+          if (t > 0.7) offset += Math.sin(t * Math.PI * 8) * 20;
           y += offset + Math.sin(t * Math.PI * 3) * 8;
         }
 
