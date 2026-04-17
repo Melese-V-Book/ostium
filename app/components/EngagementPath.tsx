@@ -9,7 +9,7 @@ export default function EngagementPath() {
         If continuation is necessary, a direct channel exists.
       </p>
       <a
-        href="mailto:contact@cross-nodal.com"
+        href="mailto:contact@crossnodal.com"
         className="text-gray-500 text-xs hover:text-gray-300 transition"
       >
         contact@cross-nodal.com
