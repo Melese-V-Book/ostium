@@ -17,11 +17,13 @@ export default function Home() {
   const [phase, setPhase] = useState<'entry' | 'impact' | 'corridor'>('entry');
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
   const [inquiryText, setInquiryText] = useState<string | null>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
 
+  const groundingRef = useRef<HTMLDivElement>(null);
   const scrollTimerRef = useRef<NodeJS.Timeout | null>(null);
   const scrollAnimationRef = useRef<number | null>(null);
 
-  // Smart continuous scroll
+  // Smart continuous scroll (only after reveal)
   const startSmartScroll = () => {
     const startY = window.scrollY;
     const targetY = document.body.scrollHeight - window.innerHeight;
@@ -46,25 +48,42 @@ export default function Home() {
     scrollAnimationRef.current = requestAnimationFrame(animateScroll);
   };
 
+  // Handle inquiry submission
+  const handleInquirySubmit = (text: string) => {
+    setInquiryText(text);
+    setInquirySubmitted(true);
+  };
+
+  // Reveal continuation after submission (with delay, then scroll)
   useEffect(() => {
     if (inquirySubmitted) {
-      // Wait 2 seconds after dissolution, then start slow continuous scroll
+      // Wait for dissolution animation (approx 600ms) then reveal
+      const revealTimer = setTimeout(() => {
+        setIsRevealed(true);
+      }, 600);
+
+      // Start smart scroll 2 seconds after submission
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
       scrollTimerRef.current = setTimeout(() => {
         startSmartScroll();
         scrollTimerRef.current = null;
       }, 2000);
+
+      return () => {
+        clearTimeout(revealTimer);
+        if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+        if (scrollAnimationRef.current) cancelAnimationFrame(scrollAnimationRef.current);
+      };
     }
+  }, [inquirySubmitted]);
+
+  // Clean up on unmount
+  useEffect(() => {
     return () => {
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
       if (scrollAnimationRef.current) cancelAnimationFrame(scrollAnimationRef.current);
     };
-  }, [inquirySubmitted]);
-
-  const handleInquirySubmit = (text: string) => {
-    setInquiryText(text);
-    setInquirySubmitted(true);
-  };
+  }, []);
 
   if (phase === 'entry') {
     return <EntryLayer onComplete={() => setPhase('impact')} />;
@@ -76,20 +95,32 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-black text-white relative">
+      {/* Passive trace – always full opacity */}
       <div className="absolute inset-0 pointer-events-none">
         <PassiveBehaviorTrace mode="drift" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
+        {/* Main trajectory – always full visibility */}
         <TrajectoryField mode="drift" />
 
+        {/* Inquiry – only if not submitted */}
         {!inquirySubmitted && <TrajectoryInquiry onSubmit={handleInquirySubmit} />}
 
-        <StructuralGrounding />
-        <BehavioralExtension />
-        <StructuralResonance />
-        <EngagementPath />
-        <IdentityLayer />
+        {/* Continuation content – opacity transitions on reveal */}
+        <div
+          className="transition-opacity duration-1000 ease-out"
+          style={{ opacity: isRevealed ? 1 : 0.35 }}
+        >
+          <div ref={groundingRef}>
+            <StructuralGrounding />
+          </div>
+          <BehavioralExtension />
+          <StructuralResonance />
+          <EngagementPath />
+          <IdentityLayer />
+        </div>
+
         <SilentOperationalBridge inquiryText={inquiryText} />
       </div>
     </main>
