@@ -2,27 +2,33 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import TrajectoryField from '../components/TrajectoryField';
 
 export default function RoadmapsPage() {
   const phases = [
     {
-      phase: 'Current',
-      description: 'Stabilised core: systems study, bounded synthesis, responsiveness governance.',
-      trajectory: 'stable → synthesis → verification',
-      mode: 'drift', // stable, slight improvement tendency
+      phase: 'Phase 1 — First‑contact readiness',
+      description: 'Era‑condition banner, Safe First Action Layer, compact briefs, reader path selector.  (Implemented)',
+      vital_aletheia: '#Vital‑Axis ensures human consequence visible; #Aletheia ensures anti‑inflation posture.',
     },
     {
-      phase: 'Near',
-      description: 'Extended orchestration across federated multi‑OS ecosystems and autonomous validation.',
-      trajectory: 'integration → federation → autonomous audit',
-      mode: 'step', // discrete jumps
+      phase: 'Phase 2 — Bounded demonstration readiness',
+      description: 'Technical‑first path, demonstration card template with evidence boundary and human consequence fields.',
+      vital_aletheia: 'Demonstrations become inspection objects, not marketing examples.',
     },
     {
-      phase: 'Horizon',
-      description: 'Civilisation‑scale coordination: interplanetary logistics, energy grids, and AI‑mediated resilience.',
-      trajectory: 'scale → coherence → continuity',
-      mode: 'hybrid_drift_bifurcation', // branching possibilities
+      phase: 'Phase 3 — Evidence maturity and benchmark discipline',
+      description: 'Stronger #Aletheia‑Bench alignment, limitation tracking, maturity classification.',
+      vital_aletheia: 'Comparability without false standard claims.',
+    },
+    {
+      phase: 'Phase 4 — Human‑position and domain‑specific maturity',
+      description: 'Role‑specific reader routes, responsibility mapping, domain‑specific consequence framing.',
+      vital_aletheia: 'Interface adapts to real human positions, not generic profiles.',
+    },
+    {
+      phase: 'Phase 5 — Cross‑domain ecosystem continuity',
+      description: '#Globo‑Dinámico synchronization, registry alignment, bounded expansion discipline.',
+      vital_aletheia: 'Preservation of non‑authority, human judgment primacy.',
     },
   ];
 
@@ -32,12 +38,13 @@ export default function RoadmapsPage() {
         <Link href="/" className="text-gray-500 text-sm hover:text-gray-300 transition">
           ← Return to Ostium
         </Link>
-        <h1 className="text-2xl font-light tracking-wide mt-12 mb-8">Trajectory</h1>
+        <h1 className="text-2xl font-light tracking-wide mt-12 mb-6">Roadmaps: From Interface Readiness to Evidence‑Mature Growth</h1>
         <p className="text-gray-400 text-sm mb-12">
-          The ecosystem evolves through bounded stages. Each phase is a declared trajectory, not a
-          promise of delivery. Resilience and capability are earned step by step.
+          The roadmap for #Ostium / CrossNodal is not only a feature roadmap. It is a maturity roadmap.
+          #Vital‑Axis guides human‑position relevance. #Aletheia‑Desk/Bench guides evidence maturity and limitation‑awareness.
         </p>
-        <div className="space-y-16">
+
+        <div className="space-y-12">
           {phases.map((item, idx) => (
             <motion.div
               key={idx}
@@ -48,14 +55,12 @@ export default function RoadmapsPage() {
               className="border-l-2 border-gray-700 pl-6"
             >
               <h2 className="text-md font-light tracking-wide text-gray-200">{item.phase}</h2>
-              <div className="mt-2 mb-3">
-                <TrajectoryField mode={item.mode as any} />
-              </div>
               <p className="text-gray-400 text-sm mt-1">{item.description}</p>
-              <p className="text-gray-500 text-xs mt-2 font-mono">{item.trajectory}</p>
+              <p className="text-gray-500 text-xs mt-2 font-mono">{item.vital_aletheia}</p>
             </motion.div>
           ))}
         </div>
+
         <div className="mt-16 pt-8 border-t border-gray-800 text-gray-600 text-xs text-center">
           <div className="space-y-1">
             <div>Cross‑Nodal</div>

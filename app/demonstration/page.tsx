@@ -5,41 +5,22 @@ import { motion } from 'framer-motion';
 import TrajectoryField from '../components/TrajectoryField';
 
 export default function DemonstrationPage() {
-  const examples = [
+  const demos = [
     {
-      title: 'Continuous Drift',
-      description: 'Gradual deviation from nominal behaviour. Instability emerges slowly, then accelerates.',
-      mode: 'drift',
+      title: 'Reverberation Before Consequence',
+      condition: 'A local decision or signal begins to affect downstream system behavior.',
+      transition: 'Boundary shift, propagation, escalation, or evidence degradation.',
+      vital_relevance: 'What human or operational consequence becomes visible?',
+      aletheia_boundary: 'What evidence exists, and what does it not prove?',
+      human_judgment: 'Where the reader or reviewer must still decide.',
     },
     {
-      title: 'Discrete Step',
-      description: 'Sudden state changes. The system jumps between plateaus before entering consequence.',
-      mode: 'step',
-    },
-    {
-      title: 'Silent → Abrupt',
-      description: 'Long stability, then sudden divergence. Hidden condition surfaces without warning.',
-      mode: 'silent_abrupt',
-    },
-    {
-      title: 'Oscillatory Instability',
-      description: 'Rhythm changes before amplitude grows. Feedback loops become unstable.',
-      mode: 'oscillatory',
-    },
-    {
-      title: 'Cascading Propagation',
-      description: 'Local disturbance spreads. Failure amplifies across connected subsystems.',
-      mode: 'cascade',
-    },
-    {
-      title: 'Hybrid: Drift + Step',
-      description: 'Continuous degradation interrupted by discrete regime shifts.',
-      mode: 'hybrid_drift_step',
-    },
-    {
-      title: 'Hybrid: Drift + Bifurcation',
-      description: 'Gradual drift leads to a branching of possible futures.',
-      mode: 'hybrid_drift_bifurcation',
+      title: 'Drift into Step',
+      condition: 'Continuous degradation interrupted by discrete regime shift.',
+      transition: 'Hidden state change followed by observable jump.',
+      vital_relevance: 'Who bears the cost if the regime shift is missed?',
+      aletheia_boundary: 'The simulation shows pattern, not real‑world measurement.',
+      human_judgment: 'Whether the drift is truly detectable before the step.',
     },
   ];
 
@@ -49,29 +30,37 @@ export default function DemonstrationPage() {
         <Link href="/" className="text-gray-500 text-sm hover:text-gray-300 transition">
           ← Return to Ostium
         </Link>
-        <h1 className="text-2xl font-light tracking-wide mt-12 mb-8">Behavioural Demonstrations</h1>
+        <h1 className="text-2xl font-light tracking-wide mt-12 mb-8">Demonstration: From Structure to Bounded Evidence</h1>
         <p className="text-gray-400 text-sm mb-12 max-w-2xl">
-          The following trajectories illustrate generic system behaviours. Each belongs to a different
-          archetype – continuous, discrete, silent, oscillatory, cascading, or hybrid.
-          No domain labels are needed. A systems engineer will recognise their own system in one or more of these patterns.
+          Demonstrations in #Ostium / CrossNodal are not presented as proof, certification, or external validation.
+          They are bounded visibility exercises. #Vital‑Axis keeps them connected to human consequence.
+          #Aletheia‑Desk/Bench keeps them bounded by evidence discipline and limitation‑awareness.
         </p>
+
         <div className="space-y-24">
-          {examples.map((ex, idx) => (
+          {demos.map((demo, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
+              className="border-l-2 border-gray-700 pl-6"
             >
-              <TrajectoryField mode={ex.mode as any} />
-              <div className="mt-4 text-center">
-                <h2 className="text-md font-light tracking-wide text-gray-200">{ex.title}</h2>
-                <p className="text-gray-500 text-xs mt-1">{ex.description}</p>
+              <TrajectoryField mode={idx === 0 ? 'hybrid_drift_bifurcation' : 'hybrid_drift_step'} />
+              <div className="mt-4 space-y-3">
+                <h2 className="text-md font-light tracking-wide text-gray-200">{demo.title}</h2>
+                <p className="text-gray-400 text-xs"><span className="font-mono">Condition:</span> {demo.condition}</p>
+                <p className="text-gray-400 text-xs"><span className="font-mono">Transition visible:</span> {demo.transition}</p>
+                <p className="text-gray-400 text-xs"><span className="font-mono">#Vital‑Axis relevance:</span> {demo.vital_relevance}</p>
+                <p className="text-gray-400 text-xs"><span className="font-mono">#Aletheia evidence boundary:</span> {demo.aletheia_boundary}</p>
+                <p className="text-gray-400 text-xs"><span className="font-mono">Human judgment retained:</span> {demo.human_judgment}</p>
+                <p className="text-gray-500 text-2xs mt-2">Safe first action: Relevant / Route / Brief / No</p>
               </div>
             </motion.div>
           ))}
         </div>
+
         <div className="mt-24 pt-8 border-t border-gray-800 text-gray-600 text-xs text-center">
           <div className="space-y-1">
             <div>Cross‑Nodal</div>
